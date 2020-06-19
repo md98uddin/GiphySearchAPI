@@ -18,18 +18,30 @@ class App extends Component {
 
   //on component mounting, call API for trending
   componentDidMount = async () => {
-    if (this.state.gifs === null) {
-      axios
-        .get(
-          `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=25`
-        )
-        .then(async (res) => {
-          console.log("res", res.data.data);
-          this.setState({
-            gifs: res.data.data,
-            currentTerm: "Trending",
-          });
+    const { gifs } = this.state;
+    var storage = localStorage.getItem("gifs-arr");
+
+    if (gifs === null) {
+      //check localstorage for data and set to state
+      if (storage.length > 0) {
+        this.setState({
+          gifs: JSON.parse(storage),
         });
+      } else {
+        //if no localstorage, call trend api
+        axios
+          .get(
+            `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=24`
+          )
+          .then(async (res) => {
+            //set data to localstorage for quick fast access
+            localStorage.setItem("gifs-arr", JSON.stringify(res.data.data));
+            this.setState({
+              gifs: res.data.data,
+              currentTerm: "Trending",
+            });
+          });
+      }
     }
   };
 
@@ -44,13 +56,13 @@ class App extends Component {
   onSearchTermSubmit = () => {};
 
   render() {
-    const { gifs, currentTerm } = this.state;
-    console.log("gifs", gifs);
+    const { gifs, currentTerm, searchTerm } = this.state;
     return (
       <div className="container">
         <SearchBar
           setSearchTerm={this.setSearchTerm}
           onSearchTermSubmit={this.onSearchTermSubmit}
+          searchTerm={searchTerm}
         />
         <FilterSort />
         <ShowGifs gifs={gifs} currentTerm={currentTerm} />
