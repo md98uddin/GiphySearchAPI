@@ -1,7 +1,12 @@
 import React from "react";
+import SelectOptions from "./SelectOptions";
 
 const FilterSort = () => {
-  return <p>Filter</p>;
+  return (
+    <div>
+      <SelectOptions />
+    </div>
+  );
 };
 
 export default FilterSort;

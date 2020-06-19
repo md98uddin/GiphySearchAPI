@@ -1,6 +1,11 @@
 import React from "react";
 
-const SearchBar = ({ setSearchTerm, onSearchTermSubmit, searchTerm }) => {
+const SearchBar = ({
+  setSearchTerm,
+  onSearchTermSubmit,
+  refreshTrending,
+  searchTerm,
+}) => {
   return (
     <div
       className="searchbar"
@@ -16,11 +21,29 @@ const SearchBar = ({ setSearchTerm, onSearchTermSubmit, searchTerm }) => {
         <button
           className="btn-primary"
           onClick={() => onSearchTermSubmit()}
-          style={{ width: 50, marginLeft: 5 }}
+          style={{
+            width: 50,
+            marginLeft: 5,
+            boxShadow: "none",
+            outline: "none",
+          }}
         >
           🔍
         </button>
       )}
+      <button
+        className="btn-success"
+        style={{
+          width: 50,
+          fontSize: 16,
+          marginLeft: 2,
+          boxShadow: "none",
+          outline: "none",
+        }}
+        onClick={refreshTrending}
+      >
+        ⟳
+      </button>
     </div>
   );
 };
