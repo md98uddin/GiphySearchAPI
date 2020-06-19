@@ -22,15 +22,18 @@ const SearchBar = ({
         }}
         style={{ width: 300 }}
       />
+      <br></br>
       {searchTerm && (
         <button
           className="btn-primary"
           onClick={() => onSearchTermSubmit()}
           style={{
             width: 50,
+            marginTop: 5,
             marginLeft: 5,
             boxShadow: "none",
             outline: "none",
+            borderRadius: "10px",
           }}
         >
           🔍
@@ -41,9 +44,11 @@ const SearchBar = ({
         style={{
           width: 50,
           fontSize: 16,
-          marginLeft: 2,
+          marginLeft: 5,
+          marginTop: 5,
           boxShadow: "none",
           outline: "none",
+          borderRadius: "10px",
         }}
         onClick={refreshTrending}
       >
