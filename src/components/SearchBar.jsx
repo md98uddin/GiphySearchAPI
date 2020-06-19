@@ -15,6 +15,11 @@ const SearchBar = ({
         placeholder="Search by keywords "
         id="searchTerm"
         onChange={setSearchTerm}
+        onKeyPress={event => {
+          if (event.key === 'Enter') {
+            onSearchTermSubmit()
+          }
+        }}
         style={{ width: 300 }}
       />
       {searchTerm && (
