@@ -11,17 +11,24 @@ class App extends Component {
   state = {
     gifs: null,
     searchTerm: null,
+    currentTerm: null,
     newestGifs: false,
     oldestGifs: false,
   };
 
-  //on component mounting, call API for tending
+  //on component mounting, call API for trending
   componentDidMount = async () => {
     if (this.state.gifs === null) {
       axios
-        .get("http://api.giphy.com/v1/gifs/trending", { api_key: API_KEY })
+        .get(
+          `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=25`
+        )
         .then(async (res) => {
           console.log("res", res.data.data);
+          this.setState({
+            gifs: res.data.data,
+            currentTerm: "Trending",
+          });
         });
     }
   };
@@ -37,6 +44,8 @@ class App extends Component {
   onSearchTermSubmit = () => {};
 
   render() {
+    const { gifs, currentTerm } = this.state;
+    console.log("gifs", gifs);
     return (
       <div className="container">
         <SearchBar
@@ -44,7 +53,7 @@ class App extends Component {
           onSearchTermSubmit={this.onSearchTermSubmit}
         />
         <FilterSort />
-        <ShowGifs />
+        <ShowGifs gifs={gifs} currentTerm={currentTerm} />
       </div>
     );
   }
