@@ -12,14 +12,15 @@ class App extends Component {
     gifs: null,
     searchTerm: null,
     currentTerm: null,
-    newestGifs: false,
-    oldestGifs: false,
+    gifSort: null,
+    gifFilter: null,
     isLoading: false,
+    gifSize: 24,
   };
 
   //on component mounting, call API for trending
   componentDidMount = async () => {
-    const { gifs } = this.state;
+    const { gifs, gifSize } = this.state;
     var storage = localStorage.getItem("gifs-arr");
 
     this.setState({
@@ -36,17 +37,19 @@ class App extends Component {
         });
       } else {
         //if no localstorage, call trend api
-        this.refreshTrending();
+        this.refreshTrending(gifSize);
       }
     }
   };
 
-  refreshTrending = async () => {
+  refreshTrending = async (size) => {
     this.setState({
       isLoading: true,
     });
     axios
-      .get(`https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=24`)
+      .get(
+        `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${size}`
+      )
       .then(async (res) => {
         //set data to localstorage for quick fast access
         localStorage.setItem("gifs-arr", JSON.stringify(res.data.data));
@@ -66,25 +69,43 @@ class App extends Component {
   };
 
   //make the api call with search term on submit
-  onSearchTermSubmit = async () => {
+  onSearchTermSubmit = async (searchTerm, size) => {
     this.setState({
       isLoading: true,
     });
     axios
       .get(
-        `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${this.state.searchTerm}&limit=24`
+        `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${searchTerm}&limit=${size}`
       )
       .then((res) => {
         this.setState({
           gifs: res.data.data,
-          currentTerm: this.state.searchTerm,
+          currentTerm: searchTerm,
           isLoading: false,
+          gifSize: size,
         });
       });
   };
 
+  //onScroll end, load more gifs
+  onScrollEnd = (event) => {
+    var { scrollHeight, scrollTop, clientHeight } = event.target;
+    var bottom = scrollHeight - scrollTop === clientHeight;
+    if (bottom === true) {
+      var newSize = this.state.gifSize + 9;
+      this.setState({
+        gifSize: newSize,
+      });
+
+      if (this.state.searchTerm)
+        return this.onSearchTermSubmit(this.state.searchTerm, newSize);
+
+      return this.refreshTrending(newSize);
+    }
+  };
+
   render() {
-    const { gifs, currentTerm, searchTerm, isLoading } = this.state;
+    const { gifs, currentTerm, searchTerm, isLoading, gifSize } = this.state;
     return (
       <div className="container">
         <SearchBar
@@ -92,9 +113,16 @@ class App extends Component {
           onSearchTermSubmit={this.onSearchTermSubmit}
           refreshTrending={this.refreshTrending}
           searchTerm={searchTerm}
+          gifSize={gifSize}
         />
         <FilterSort />
-        <ShowGifs gifs={gifs} currentTerm={currentTerm} isLoading={isLoading} />
+        <ShowGifs
+          gifs={gifs}
+          currentTerm={currentTerm}
+          isLoading={isLoading}
+          onScrollEnd={this.onScrollEnd}
+          gifSize={gifSize}
+        />
       </div>
     );
   }
