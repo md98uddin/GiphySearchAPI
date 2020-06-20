@@ -13,16 +13,19 @@ const API_KEY = "CrttO3jUNbjZm6l442VFCXjvB7ZmmNq6";
 class App extends Component {
   state = {
     gifs: null,
-    searchTerm: null, //What user types on search bar
-    currentTerm: null, //The filter selection
-    filterSelection: 'null', // The filter currently selected
+    searchTerm: null,
+    currentTerm: null,
+    gifSort: null,
+    gifFilter: null,
+    filterSelection: null,
     isLoading: false,
+    gifSize: 24,
   };
 
   //on component mounting, call API for trending
   // Default page
   componentDidMount = async () => {
-    const { gifs } = this.state;
+    const { gifs, gifSize } = this.state;
     var storage = localStorage.getItem("gifs-arr");
 
     this.setState({
@@ -39,18 +42,19 @@ class App extends Component {
         });
       } else {
         //if no localstorage, call trend api
-        this.refreshTrending();
+        this.refreshTrending(gifSize);
       }
     }
   };
 
-  // Called if there is no local data stored
-  refreshTrending = async () => {
+  refreshTrending = async (size) => {
     this.setState({
       isLoading: true,
     });
     axios
-      .get(`https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=24`)
+      .get(
+        `https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=${size}`
+      )
       .then(async (res) => {
         //set data to localstorage for quick fast access
         localStorage.setItem("gifs-arr", JSON.stringify(res.data.data));
@@ -69,34 +73,51 @@ class App extends Component {
     });
   };
 
-    //handleChange changes the filter selected
-    handleChange = (event) => {
-      this.setState({
-        filterSelection: event.target.value,
-      });
-    };
+  //handleChange changes the filter selected
+  handleChange = (event) => {
+    this.setState({
+      filterSelection: event.target.value,
+    });
+  };
 
   //make the api call with search term on submit
-  onSearchTermSubmit = async () => {
+  onSearchTermSubmit = async (searchTerm, size) => {
     this.setState({
       isLoading: true,
     });
     axios
       .get(
-        `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${this.state.searchTerm}&limit=24`
+        `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${searchTerm}&limit=${size}`
       )
       .then((res) => {
         this.setState({
           gifs: res.data.data,
-          currentTerm: this.state.searchTerm,
+          currentTerm: searchTerm,
           isLoading: false,
+          gifSize: size,
         });
       });
   };
 
+  //onScroll end, load more gifs
+  onScrollEnd = (event) => {
+    var { scrollHeight, scrollTop, clientHeight } = event.target;
+    var bottom = scrollHeight - scrollTop === clientHeight;
+    if (bottom === true) {
+      var newSize = this.state.gifSize + 9;
+      this.setState({
+        gifSize: newSize,
+      });
+
+      if (this.state.searchTerm)
+        return this.onSearchTermSubmit(this.state.searchTerm, newSize);
+
+      return this.refreshTrending(newSize);
+    }
+  };
+
   render() {
-    const { gifs, currentTerm, searchTerm, isLoading } = this.state;
-    //var test = this.state.filterSelection;
+    const { gifs, currentTerm, searchTerm, isLoading, gifSize } = this.state;
     return (
       <div className="container">
         <SearchBar
@@ -104,6 +125,7 @@ class App extends Component {
           onSearchTermSubmit={this.onSearchTermSubmit}
           refreshTrending={this.refreshTrending}
           searchTerm={searchTerm}
+          gifSize={gifSize}
         />
         <div>
           <select
@@ -115,7 +137,13 @@ class App extends Component {
             <option value="oldest">Oldest</option>
           </select>
         </div>
-        <ShowGifs gifs={gifs} currentTerm={currentTerm} isLoading={isLoading} />
+        <ShowGifs
+          gifs={gifs}
+          currentTerm={currentTerm}
+          isLoading={isLoading}
+          onScrollEnd={this.onScrollEnd}
+          gifSize={gifSize}
+        />
       </div>
     );
   }
