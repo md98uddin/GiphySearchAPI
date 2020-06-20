@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import SearchBar from "./components/SearchBar";
-import FilterSort from "./components/FilterSort";
 import ShowGifs from "./components/ShowGifs";
+
+//
+//  Deleted FilterSort and SelectOptions
+//
 
 //to make api call to GIPHY API
 const API_KEY = "CrttO3jUNbjZm6l442VFCXjvB7ZmmNq6";
@@ -10,14 +13,14 @@ const API_KEY = "CrttO3jUNbjZm6l442VFCXjvB7ZmmNq6";
 class App extends Component {
   state = {
     gifs: null,
-    searchTerm: null,
-    currentTerm: null,
-    newestGifs: false,
-    oldestGifs: false,
+    searchTerm: null, //What user types on search bar
+    currentTerm: null, //The filter selection
+    filterSelection: 'null', // The filter currently selected
     isLoading: false,
   };
 
   //on component mounting, call API for trending
+  // Default page
   componentDidMount = async () => {
     const { gifs } = this.state;
     var storage = localStorage.getItem("gifs-arr");
@@ -41,6 +44,7 @@ class App extends Component {
     }
   };
 
+  // Called if there is no local data stored
   refreshTrending = async () => {
     this.setState({
       isLoading: true,
@@ -65,6 +69,13 @@ class App extends Component {
     });
   };
 
+    //handleChange changes the filter selected
+    handleChange = (event) => {
+      this.setState({
+        filterSelection: event.target.value,
+      });
+    };
+
   //make the api call with search term on submit
   onSearchTermSubmit = async () => {
     this.setState({
@@ -85,6 +96,7 @@ class App extends Component {
 
   render() {
     const { gifs, currentTerm, searchTerm, isLoading } = this.state;
+    //var test = this.state.filterSelection;
     return (
       <div className="container">
         <SearchBar
@@ -93,7 +105,16 @@ class App extends Component {
           refreshTrending={this.refreshTrending}
           searchTerm={searchTerm}
         />
-        <FilterSort />
+        <div>
+          <select
+            value={this.state.filterSelection}
+            onChange={this.handleChange}
+            >
+            <option value="relevance">Relevance</option>
+            <option value="recent">Most Recent</option>
+            <option value="oldest">Oldest</option>
+          </select>
+        </div>
         <ShowGifs gifs={gifs} currentTerm={currentTerm} isLoading={isLoading} />
       </div>
     );
