@@ -5,6 +5,7 @@ const SearchBar = ({
   onSearchTermSubmit,
   refreshTrending,
   searchTerm,
+  gifSize,
 }) => {
   return (
     <div
@@ -20,7 +21,7 @@ const SearchBar = ({
       {searchTerm && (
         <button
           className="btn-primary"
-          onClick={() => onSearchTermSubmit()}
+          onClick={() => onSearchTermSubmit(searchTerm, 24)}
           style={{
             width: 50,
             marginLeft: 5,
