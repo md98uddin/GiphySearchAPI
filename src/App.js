@@ -17,7 +17,7 @@ class App extends Component {
     currentTerm: null,
     gifSort: null,
     gifFilter: null,
-    filterSelection: null,
+    filterSelection: "null",
     isLoading: false,
     gifSize: 24,
   };
@@ -78,16 +78,18 @@ class App extends Component {
     this.setState({
       filterSelection: event.target.value,
     });
+    if (this.state.filterSelection)
+        return this.onSearchTermSubmit(this.state.searchTerm, this.state.filterSelection);
   };
 
   //make the api call with search term on submit
-  onSearchTermSubmit = async (searchTerm, size) => {
+  onSearchTermSubmit = async (searchTerm, filterSelection, size) => {
     this.setState({
       isLoading: true,
     });
     axios
       .get(
-        `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${searchTerm}&limit=${size}`
+            `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${searchTerm}&sort=${filterSelection}&limit=${size}`
       )
       .then((res) => {
         this.setState({
@@ -110,21 +112,24 @@ class App extends Component {
       });
 
       if (this.state.searchTerm)
-        return this.onSearchTermSubmit(this.state.searchTerm, newSize);
+        return this.onSearchTermSubmit(this.state.searchTerm, this.state.filterSelection, newSize);
 
       return this.refreshTrending(newSize);
     }
   };
 
   render() {
-    const { gifs, currentTerm, searchTerm, isLoading, gifSize } = this.state;
+    const { gifs, currentTerm, searchTerm, isLoading, gifSize, filterSelection } = this.state;
+    var mess = "you picked: " + this.state.filterSelection;
     return (
       <div className="container">
         <SearchBar
           setSearchTerm={this.setSearchTerm}
           onSearchTermSubmit={this.onSearchTermSubmit}
           refreshTrending={this.refreshTrending}
+          handleChange={this.handleChange}
           searchTerm={searchTerm}
+          filterSelection={filterSelection}
           gifSize={gifSize}
         />
         <div>
@@ -132,11 +137,11 @@ class App extends Component {
             value={this.state.filterSelection}
             onChange={this.handleChange}
             >
-            <option value="relevance">Relevance</option>
-            <option value="recent">Most Recent</option>
-            <option value="oldest">Oldest</option>
+            <option value="relevant">Relevant</option>
+            <option value="recent">Recent</option>
           </select>
         </div>
+        <p>{mess}</p>
         <ShowGifs
           gifs={gifs}
           currentTerm={currentTerm}

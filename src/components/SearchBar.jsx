@@ -5,6 +5,8 @@ const SearchBar = ({
   onSearchTermSubmit,
   refreshTrending,
   searchTerm,
+  handleChange,
+  filterSelection,
   gifSize,
 }) => {
   return (
@@ -18,16 +20,16 @@ const SearchBar = ({
         onChange={setSearchTerm}
         onKeyPress={event => {
           if (event.key === 'Enter') {
-            onSearchTermSubmit()
+            onSearchTermSubmit(searchTerm, handleChange, 24)
           }
         }}
         style={{ width: 300 }}
       />
       <br></br>
-      {searchTerm && (
+      {searchTerm && handleChange && (
         <button
           className="btn-primary"
-          onClick={() => onSearchTermSubmit(searchTerm, 24)}
+          onClick={() => onSearchTermSubmit(searchTerm, handleChange, 24)}
           style={{
             width: 50,
             marginTop: 5,
