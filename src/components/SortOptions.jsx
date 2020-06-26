@@ -1,13 +1,14 @@
 import React from "react";
 
-const SelectOptions = ({ filterSelection, handleChange }) => {
+const SortOptions = ({ filterSelection, handleChange }) => {
   return (
-    <select id="select-time">
-      <option value="none">SORT BY</option>
-      <option value="recent">Most Recent</option>
-      <option value="oldest">Oldest</option>
-    </select>
+    <div>
+      <select value={filterSelection} onChange={handleChange}>
+        <option value="relevant">Relevant</option>
+        <option value="recent">Recent</option>
+      </select>
+    </div>
   );
 };
 
-export default SelectOptions;
+export default SortOptions;
