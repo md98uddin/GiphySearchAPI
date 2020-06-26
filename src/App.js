@@ -107,7 +107,7 @@ class App extends Component {
   render() {
     const { gifs, currentTerm, searchTerm, isLoading, gifSize } = this.state;
     return (
-      <div className="container">
+      <div className="container" id="gif-content">
         <SearchBar
           setSearchTerm={this.setSearchTerm}
           onSearchTermSubmit={this.onSearchTermSubmit}
