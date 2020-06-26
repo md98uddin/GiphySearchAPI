@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import SearchBar from "./components/SearchBar";
 import ShowGifs from "./components/ShowGifs";
+import SortOptions from "./components/SortOptions";
 
 //
 //  Deleted FilterSort and SelectOptions
@@ -17,7 +18,7 @@ class App extends Component {
     currentTerm: null,
     gifSort: null,
     gifFilter: null,
-    filterSelection: "null",
+    filterSelection: "relevant",
     isLoading: false,
     gifSize: 24,
   };
@@ -75,11 +76,16 @@ class App extends Component {
 
   //handleChange changes the filter selected
   handleChange = (event) => {
+    const { searchTerm, filterSelection, gifSize } = this.state;
     this.setState({
       filterSelection: event.target.value,
     });
-    if (this.state.filterSelection)
-        return this.onSearchTermSubmit(this.state.searchTerm, this.state.filterSelection);
+    if (filterSelection)
+      return this.onSearchTermSubmit(
+        searchTerm,
+        filterSelection,
+        gifSize > 0 ? gifSize : 24
+      );
   };
 
   //make the api call with search term on submit
@@ -89,7 +95,7 @@ class App extends Component {
     });
     axios
       .get(
-            `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${searchTerm}&sort=${filterSelection}&limit=${size}`
+        `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${searchTerm}&sort=${filterSelection}&limit=${size}`
       )
       .then((res) => {
         this.setState({
@@ -112,15 +118,25 @@ class App extends Component {
       });
 
       if (this.state.searchTerm)
-        return this.onSearchTermSubmit(this.state.searchTerm, this.state.filterSelection, newSize);
+        return this.onSearchTermSubmit(
+          this.state.searchTerm,
+          this.state.filterSelection,
+          newSize
+        );
 
       return this.refreshTrending(newSize);
     }
   };
 
   render() {
-    const { gifs, currentTerm, searchTerm, isLoading, gifSize, filterSelection } = this.state;
-    var mess = "you picked: " + this.state.filterSelection;
+    const {
+      gifs,
+      currentTerm,
+      searchTerm,
+      isLoading,
+      gifSize,
+      filterSelection,
+    } = this.state;
     return (
       <div className="container">
         <SearchBar
@@ -132,16 +148,11 @@ class App extends Component {
           filterSelection={filterSelection}
           gifSize={gifSize}
         />
-        <div>
-          <select
-            value={this.state.filterSelection}
-            onChange={this.handleChange}
-            >
-            <option value="relevant">Relevant</option>
-            <option value="recent">Recent</option>
-          </select>
-        </div>
-        <p>{mess}</p>
+        <SortOptions
+          handleChange={this.handleChange}
+          filterSelection={filterSelection}
+        />
+        {filterSelection !== null && <p>{"you picked: " + filterSelection}</p>}
         <ShowGifs
           gifs={gifs}
           currentTerm={currentTerm}
