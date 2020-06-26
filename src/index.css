@@ -17,3 +17,22 @@ code {
   max-width: 100% !important;
   padding: 0px !important;
 }
+
+/* input Css */
+
+.searchbar {
+  display: flex;
+  margin: 20px auto;
+  width: 50%;
+}
+
+#searchTerm {
+  width: 80%;
+}
+
+.btn-success {
+  width: 20%;
+  margin-top: 0px !important;
+  padding: 6px 12px;
+  line-height: 1.2;
+}
