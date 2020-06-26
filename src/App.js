@@ -122,7 +122,7 @@ class App extends Component {
     const { gifs, currentTerm, searchTerm, isLoading, gifSize, filterSelection } = this.state;
     var mess = "you picked: " + this.state.filterSelection;
     return (
-      <div className="container">
+      <div className="container" id="gif-content">
         <SearchBar
           setSearchTerm={this.setSearchTerm}
           onSearchTermSubmit={this.onSearchTermSubmit}

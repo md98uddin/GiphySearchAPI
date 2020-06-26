@@ -1,13 +1,96 @@
 body {
+  background-color: whitesmoke !important;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+body::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f5f5f5;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #20639b;
+  background-image: -webkit-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+}
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+#gif-content {
+  max-width: 100% !important;
+  padding: 0px !important;
+}
+
+/* input Css */
+
+.searchbar {
+  display: flex;
+  margin: 20px auto;
+  width: 50%;
+}
+
+#searchTerm {
+  width: 80% !important;
+}
+
+.btn-success {
+  width: 20% !important;
+  margin-top: 0px !important;
+  padding: 6px 12px;
+  line-height: 1.2;
+}
+#select-filter {
+  width: 400px;
+  margin: 20px auto;
+}
+
+#gifs-view {
+  overflow-y: hidden !important;
+  height: 100% !important;
+}
+
+#select-numbers,
+#select-time {
+  padding: 6px;
+  margin: 0px 12px;
+}
+
+#text-sort {
+  color: 000000;
+  text-shadow: 0px 0px 0.1px white, -0px 0px 0.1px white, -0px -0px 0.1px white,
+    0px -0px 0.1px white, 0px 1px 0.1px white, -0px 1px 0.1px white,
+    -0px -1px 0.1px white, 0px -1px 0.1px white, 0px 2px 0.1px white,
+    -0px 2px 0.1px white, -0px -2px 0.1px white, 0px -2px 0.1px white,
+    1px 0px 0.1px white, -1px 0px 0.1px white, -1px -0px 0.1px white,
+    1px -0px 0.1px white, 1px 1px 0.1px white, -1px 1px 0.1px white,
+    -1px -1px 0.1px white, 1px -1px 0.1px white, 1px 2px 0.1px white,
+    -1px 2px 0.1px white, -1px -2px 0.1px white, 1px -2px 0.1px white,
+    2px 0px 0.1px white, -2px 0px 0.1px white, -2px -0px 0.1px white,
+    2px -0px 0.1px white, 2px 1px 0.1px white, -2px 1px 0.1px white,
+    -2px -1px 0.1px white, 2px -1px 0.1px white, 2px 2px 0.1px white,
+    -2px 2px 0.1px white, -2px -2px 0.1px white, 2px -2px 0.1px white,
+    0px 0px 0px hsla(0, 0%, 0%, 0);
+  font-size: 22px;
+  letter-spacing: 1.2;
 }

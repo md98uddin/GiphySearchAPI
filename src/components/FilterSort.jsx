@@ -4,7 +4,7 @@ import FilterOptions from "./FilterOptions";
 
 const FilterSort = () => {
   return (
-    <div>
+    <div id="select-filter">
       <SelectOptions />
       <FilterOptions />
     </div>

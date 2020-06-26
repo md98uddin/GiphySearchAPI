@@ -5,7 +5,7 @@ const ShowGifs = ({ gifs, currentTerm, isLoading, onScrollEnd, gifSize }) => {
   return (
     gifs && (
       <div className="gifs" id="gifs-grid" style={{ textAlign: "center" }}>
-        <p style={{ fontWeight: "bold" }}>
+        <p id="text-sort" style={{ fontWeight: "bold" }}>
           {currentTerm} {gifSize} gifs. scroll to bottom to show more.
         </p>
         <div
