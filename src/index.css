@@ -61,11 +61,17 @@ code {
   line-height: 1.2;
 }
 #select-filter {
-  width: 200px;
+  width: 400px;
   margin: 20px auto;
 }
 
 #gifs-view {
   overflow-y: hidden !important;
   height: 100% !important;
+}
+
+#select-numbers,
+#select-time {
+  padding: 6px;
+  margin: 0px 12px;
 }
